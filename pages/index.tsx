@@ -1,4 +1,5 @@
 import { MongoClient } from "mongodb";
+import Head from "next/head";
 import MeetupList from "../components/meetups/MeetupList";
 
 export interface IMeetup {
@@ -12,6 +13,13 @@ export interface IMeetup {
 function Home(props: any) {
   return (
     <div>
+      <Head>
+        <title>Next.js Meetups</title>
+        <meta
+          name="description"
+          content="Browse a huge list of hihgly active React/Next.js meetups"
+        />
+      </Head>
       <MeetupList meetups={props.meetups} />
     </div>
   );
