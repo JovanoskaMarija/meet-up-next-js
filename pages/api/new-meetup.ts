@@ -4,16 +4,18 @@ async function handler(req: any, res: any) {
     const data = req.body;
 
     const client = await MongoClient.connect(
-      "mongodb+srv://Marija:23.09.1966@cluster0.fti0s.mongodb.net/meetusp?retryWrites=true&w=majority"
+      "mongodb+srv://Marija:test123@cluster0.fti0s.mongodb.net/meetusp?retryWrites=true&w=majority"
     );
 
     const db = client.db();
 
     const meetupsCollection = db.collection("meetups");
 
-    meetupsCollection.insertOne(data);
-
-    client.close();
+    meetupsCollection.insertOne(data, function (r) {
+      console.log("inside insertOne");
+      console.log(r);
+      client.close();
+    });
 
     res.status(201).json({ message: "Meetup inserted!" });
   }

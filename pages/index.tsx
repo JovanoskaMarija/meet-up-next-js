@@ -1,3 +1,4 @@
+import { MongoClient } from "mongodb";
 import MeetupList from "../components/meetups/MeetupList";
 
 export interface IMeetup {
@@ -7,24 +8,6 @@ export interface IMeetup {
   address: string;
   description: string;
 }
-
-const dummyMeetups = [
-  {
-    id: "m1",
-    title: "A first meeting",
-    image:
-      "https://media.tacdn.com/media/attractions-splice-spp-674x446/06/e6/6b/3a.jpg",
-    address: "First address",
-    description: "This is the first meetup",
-  },
-  {
-    id: "m2",
-    title: "A second meeting",
-    image: "https://cdn.mos.cms.futurecdn.net/xbELjBNkaox36YPsoBakF-768-80.jpg",
-    address: "Second address",
-    description: "This is the second meetup",
-  },
-];
 
 function Home(props: any) {
   console.log("props: ", props);
@@ -42,8 +25,26 @@ function Home(props: any) {
 //   };
 // }
 export async function getStaticProps() {
+  const client = await MongoClient.connect(
+    "mongodb+srv://Marija:test123@cluster0.fti0s.mongodb.net/meetusp?retryWrites=true&w=majority"
+  );
+
+  const db = client.db();
+  const meetupsCollection = db.collection("meetups");
+  const meetups = await meetupsCollection.find().toArray();
+
+  await client.close();
+
   return {
-    props: { meetups: dummyMeetups },
+    props: {
+      meetups: meetups.map((meetup) => ({
+        title: meetup.title,
+        address: meetup.address,
+        image: meetup.image,
+        desription: meetup.description,
+        id: meetup._id.toString(),
+      })),
+    },
     revalidate: 10,
   };
 }
