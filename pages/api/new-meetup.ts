@@ -13,7 +13,7 @@ async function handler(req: any, res: any) {
 
     meetupsCollection.insertOne(data, function (r) {
       console.log("inside insertOne");
-      console.log(r);
+      console.log("responese: ", r);
       client.close();
     });
 

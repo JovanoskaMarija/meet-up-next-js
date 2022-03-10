@@ -10,7 +10,6 @@ export interface IMeetup {
 }
 
 function Home(props: any) {
-  console.log("props: ", props);
   return (
     <div>
       <MeetupList meetups={props.meetups} />
@@ -32,7 +31,6 @@ export async function getStaticProps() {
   const db = client.db();
   const meetupsCollection = db.collection("meetups");
   const meetups = await meetupsCollection.find().toArray();
-
   await client.close();
 
   return {
